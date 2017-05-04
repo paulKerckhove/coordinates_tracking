@@ -34,45 +34,38 @@ const gpsTracks = [
   }
 ];
 
-const point = {
+const gpsPoint = {
   lat: 25,
   lon: 22,
   time: 1484847603028
 };
 
 
+/**
+ * first function that checks if @gpsTrack is in the square shapped by @pointNorthWest and @pointSouthEast
+ * @pointNorthWest {object} Point on the top-left corner.
+ * @pointSouthEast {object} Point on the bottom-left corner.
+ */
 
-
-
-let trackEntersTheBox = function (pointNorthWest, pointSouthEast, gpsTrack){
+function trackEntersTheBox(pointNorthWest, pointSouthEast, gpsTrack){
   console.log(gpsTrack , pointNorthWest, pointSouthEast);
   return (gpsTrack.lat >= pointNorthWest.lat && gpsTrack.lat <= pointSouthEast.lat && gpsTrack.lon <= pointNorthWest.lon && gpsTrack.lon >= pointSouthEast.lon)
 }
 
-console.log(trackEntersTheBox(pointNorthWest, pointSouthEast, gpsTrack));
+// console.log(trackEntersTheBox(pointNorthWest, pointSouthEast, gpsTrack));
 
-
-let trackIsInTheBox = function (gpsTracks, pointNorthWest, pointSouthEast){
+function trackIsInTheBox(gpsTracks, pointNorthWest, pointSouthEast){
   return gpsTracks.filter(trackEntersTheBox.bind(null, pointNorthWest, pointSouthEast)).length == gpsTracks.length
 }
 
-console.log(trackIsInTheBox(gpsTracks, pointNorthWest, pointSouthEast));
+// console.log(trackIsInTheBox(gpsTracks, pointNorthWest, pointSouthEast));
 
 let calc = function(a, b){
-  return Math.sqrt(((b.lat - a.let) * (b.lat - a.lat) + (b.lon - a.lon) * (b.lon - a.lon)))
+  return Math.sqrt(((b.lat - a.lat) * (b.lat - a.lat) + (b.lon - a.lon) * (b.lon - a.lon)))
 }
 
-let getDistanceBetweenPointAndNearestGpsPoint = function (gpsTrack, gpsPoint){
-  gpsTracks.map(calc() => {
-
-  })
+function getDistanceBetweenPointAndNearestGpsPoint(gpsTrack, gpsPoint){
+  return Math.min.apply(null, gpsTracks.map(calc.bind(null, gpsPoint)))
 }
 
-
-
-
-// let getDistanceBetweenPointAndNearestGpsPoint= function(gpsTracks, gpsPoint) {
-//   return gpsTracks.filter(elem => {
-//
-//   })
-// }
+// console.log(getDistanceBetweenPointAndNearestGpsPoint(gpsTracks, gpsPoint));
