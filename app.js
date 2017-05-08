@@ -1,5 +1,6 @@
 
 
+// Test values
 
 const pointNorthWest = {
     lat : 5,
@@ -16,6 +17,8 @@ const pointSouthEast = {
     lon : 5
 };
 
+
+
 const gpsTracks = [
   {
     lat: 10,
@@ -29,10 +32,12 @@ const gpsTracks = [
   },
   {
     lat: 10,
-    lon: 2,
+    lon: 11,
     time: 1484847603027
   }
 ];
+
+
 
 const gpsPoint = {
   lat: 25,
@@ -41,31 +46,54 @@ const gpsPoint = {
 };
 
 
+
+
 /**
- * first function that checks if @gpsTrack is in the square shapped by @pointNorthWest and @pointSouthEast
- * @pointNorthWest {object} Point on the top-left corner.
- * @pointSouthEast {object} Point on the bottom-left corner.
+ * function that checks if gpsTrack is in the square formed by @pointNorthWest and @pointSouthEast
+ * @param {object} pointNorthWest - Point on the top-left corner
+ * @param {object} pointSouthEast - Point on the bottom-left corner
+ * @param {object} gpsTrack - User's position
+ * @returns {boolean} Returns true if gpsTrack is in the square or false if gpsTrack is out of it
  */
 
-function trackEntersTheBox(pointNorthWest, pointSouthEast, gpsTrack){
-  console.log(gpsTrack , pointNorthWest, pointSouthEast);
+function trackEntersTheBox(pointNorthWest, pointSouthEast, gpsTrack) {
   return (gpsTrack.lat >= pointNorthWest.lat && gpsTrack.lat <= pointSouthEast.lat && gpsTrack.lon <= pointNorthWest.lon && gpsTrack.lon >= pointSouthEast.lon)
 }
+console.log(trackEntersTheBox(pointNorthWest, pointSouthEast, gpsTrack));
 
-// console.log(trackEntersTheBox(pointNorthWest, pointSouthEast, gpsTrack));
 
-function trackIsInTheBox(gpsTracks, pointNorthWest, pointSouthEast){
+
+
+/**
+ * function that checks if the gps track is in the square formed by pointNorthWest and pointSouthEast
+ * @param {object} pointNorthWest - Point on the top-left corner
+ * @param {object} pointSouthEast - Point on the bottom-left corner
+ * @param {array} gpsTracks - A set of GPS coordinates with a timestamp for each point
+ * @returns {boolean} Returns true if the tracks are in the square or false if out of it
+ */
+
+function trackIsInTheBox(gpsTracks, pointNorthWest, pointSouthEast) { 
   return gpsTracks.filter(trackEntersTheBox.bind(null, pointNorthWest, pointSouthEast)).length == gpsTracks.length
 }
-
 // console.log(trackIsInTheBox(gpsTracks, pointNorthWest, pointSouthEast));
 
-let calc = function(a, b){
+
+
+
+/**
+ * function that returns the minimum distance between a point and a gps track 
+ * @param {object} gpsPoint - A gps track 
+ * @param {object} gpsTrack - User's position
+ * @returns {number} Returns the minimum distance between two points
+ * I used the formula to calculte the distance between two points
+ * I'm using the same array (gpsTracks) to test it 
+ */
+
+let calculateDistanceBetweenLatandLon = function(a, b) {
   return Math.sqrt(((b.lat - a.lat) * (b.lat - a.lat) + (b.lon - a.lon) * (b.lon - a.lon)))
 }
 
-function getDistanceBetweenPointAndNearestGpsPoint(gpsTrack, gpsPoint){
-  return Math.min.apply(null, gpsTracks.map(calc.bind(null, gpsPoint)))
+function getDistanceBetweenPointAndNearestGpsPoint(gpsTrack, gpsPoint) {
+  return Math.min.apply(null, gpsTracks.map(calculateDistanceBetweenLatandLon.bind(null, gpsPoint)))
 }
-
-// console.log(getDistanceBetweenPointAndNearestGpsPoint(gpsTracks, gpsPoint));
+// console.log("the minimum distance is : " , getDistanceBetweenPointAndNearestGpsPoint(gpsTracks, gpsPoint));
